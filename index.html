@@ -1,7 +1,128 @@
-<p>大家好</p>
-<p>我是冷舒默，这是我的个人网站。</p>
-<p>很高兴你来到这里，你可以在以下的网站找到我：</p>
-<ul>
-  <li><a href="https://www.zhihu.com/people/AJLoveChina">知乎</a></li>
-  <li><a href="http://hejie.nigeerhuo.com">我的博客（已经不更新了，现在在知乎写文章）</a></li>
-</ul>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址导航管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .category {
+            margin-top: 20px;
+        }
+        .category-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .links {
+            list-style-type: none;
+            padding: 0;
+        }
+        .links li {
+            margin: 5px 0;
+        }
+        .links a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        input, select {
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>个人网站导航管理</h1>
+
+    <div>
+        <label for="category">选择类别:</label>
+        <select id="category">
+            <option value="技术">技术</option>
+            <option value="社交">社交</option>
+            <option value="娱乐">娱乐</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="url-name">网址名称:</label>
+        <input type="text" id="url-name" placeholder="请输入网站名称">
+        <label for="url-link">网址链接:</label>
+        <input type="url" id="url-link" placeholder="请输入网站链接">
+        <button onclick="addLink()">添加链接</button>
+    </div>
+
+    <div id="tech-category" class="category">
+        <div class="category-name">技术</div>
+        <ul id="tech-links" class="links"></ul>
+        <button onclick="sortLinks('tech')">排序</button>
+    </div>
+
+    <div id="social-category" class="category">
+        <div class="category-name">社交</div>
+        <ul id="social-links" class="links"></ul>
+        <button onclick="sortLinks('social')">排序</button>
+    </div>
+
+    <div id="entertainment-category" class="category">
+        <div class="category-name">娱乐</div>
+        <ul id="entertainment-links" class="links"></ul>
+        <button onclick="sortLinks('entertainment')">排序</button>
+    </div>
+
+    <script>
+        function addLink() {
+            const category = document.getElementById('category').value;
+            const name = document.getElementById('url-name').value;
+            const url = document.getElementById('url-link').value;
+
+            if (!name || !url) {
+                alert("请输入网址名称和链接！");
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.innerHTML = `${name} - <a href="${url}" target="_blank">${url}</a> <button onclick="deleteLink(this)">删除</button>`;
+            
+            switch (category) {
+                case '技术':
+                    document.getElementById('tech-links').appendChild(li);
+                    break;
+                case '社交':
+                    document.getElementById('social-links').appendChild(li);
+                    break;
+                case '娱乐':
+                    document.getElementById('entertainment-links').appendChild(li);
+                    break;
+            }
+
+            document.getElementById('url-name').value = '';
+            document.getElementById('url-link').value = '';
+        }
+
+        function deleteLink(button) {
+            const li = button.parentElement;
+            li.remove();
+        }
+
+        function sortLinks(category) {
+            const list = document.getElementById(`${category}-links`);
+            const links = Array.from(list.children);
+            links.sort((a, b) => a.textContent.localeCompare(b.textContent));
+            links.forEach(link => list.appendChild(link));
+        }
+    </script>
+</body>
+</html>
